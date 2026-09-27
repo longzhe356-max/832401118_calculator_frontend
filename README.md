@@ -1,5 +1,48 @@
-# Vue 3 + Vite
+# Calculator Frontend
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A front-end client for a front-end/back-end separated calculator system, built with Vue 3 and Vite.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Tech Stack
+
+- Vue 3
+- Vite
+- axios
+
+## Requirements
+
+- Node.js 18 or higher
+
+## Install
+
+npm install
+
+## Run
+
+npm run dev
+
+Then open http://localhost:5173 in your browser.
+
+## Configuration
+
+The back-end API base URL is configured in src/api/index.js. By default it points to:
+
+http://localhost:8080/api
+
+If the back-end is deployed elsewhere, update this value accordingly.
+
+## Project Structure
+
+src/
+  api/
+    index.js          API request wrappers
+  components/
+    Calculator.vue    Calculator UI and calculation request
+    HistoryList.vue   History list and delete actions
+  App.vue             Root component
+  main.js             Entry point
+  style.css           Global styles
+
+## Notes
+
+- All calculations are performed on the back-end. The front-end only sends expressions and displays results.
+- Calculation history is persisted on the back-end database and is not stored in the browser.
