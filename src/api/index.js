@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'https://832401118calculatorbackend-production.up.railway.app/api',
   timeout: 5000
 })
 
