@@ -1,8 +1,10 @@
 <template>
   <div class="calculator">
     <input
-      v-model="expression"
+      ref="inputRef"
+      :value="expression"
       placeholder="输入表达式，如 (1+2)*3"
+      @input="onInput"
       @keyup.enter="doCalculate"
     />
 
@@ -20,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { calculate } from '../api'
 
 const emit = defineEmits(['calculated'])
@@ -28,11 +30,49 @@ const emit = defineEmits(['calculated'])
 const expression = ref('')
 const result = ref(null)
 const errorMsg = ref('')
+const inputRef = ref(null)
 
-const buttons = ['7','8','9','÷','4','5','6','×','1','2','3','-','(','0','.','+']
+const buttons = ['7','8','9','÷','4','5','6','×','1','2','3','-','()','0','.','+']
+
+// 用户手动打字时同步
+const onInput = (e) => {
+  expression.value = e.target.value
+}
+
+// 在光标处插入文本
+const insertAtCursor = (text) => {
+  const input = inputRef.value
+  if (!input) {
+    expression.value += text
+    return
+  }
+
+  const start = input.selectionStart
+  const end = input.selectionEnd
+  const before = expression.value.slice(0, start)
+  const after = expression.value.slice(end)
+
+  // 如果是 ()，在中间插入
+  if (text === '()') {
+    expression.value = before + '()' + after
+    nextTick(() => {
+      // 光标放到括号中间
+      const pos = start + 1
+      input.setSelectionRange(pos, pos)
+      input.focus()
+    })
+  } else {
+    expression.value = before + text + after
+    nextTick(() => {
+      const pos = start + text.length
+      input.setSelectionRange(pos, pos)
+      input.focus()
+    })
+  }
+}
 
 const append = (val) => {
-  expression.value += val
+  insertAtCursor(val)
 }
 
 const clearInput = () => {
