@@ -13,6 +13,7 @@
         {{ btn }}
       </button>
       <button class="clear" @click="clearInput">C</button>
+      <button class="clear" @click="backspace">⌫</button>
       <button class="equals" @click="doCalculate">=</button>
     </div>
 
@@ -34,12 +35,10 @@ const inputRef = ref(null)
 
 const buttons = ['7','8','9','÷','4','5','6','×','1','2','3','-','()','0','.','+']
 
-// 用户手动打字时同步
 const onInput = (e) => {
   expression.value = e.target.value
 }
 
-// 在光标处插入文本
 const insertAtCursor = (text) => {
   const input = inputRef.value
   if (!input) {
@@ -52,11 +51,9 @@ const insertAtCursor = (text) => {
   const before = expression.value.slice(0, start)
   const after = expression.value.slice(end)
 
-  // 如果是 ()，在中间插入
   if (text === '()') {
     expression.value = before + '()' + after
     nextTick(() => {
-      // 光标放到括号中间
       const pos = start + 1
       input.setSelectionRange(pos, pos)
       input.focus()
@@ -73,6 +70,10 @@ const insertAtCursor = (text) => {
 
 const append = (val) => {
   insertAtCursor(val)
+}
+
+const backspace = () => {
+  expression.value = expression.value.slice(0, -1)
 }
 
 const clearInput = () => {
@@ -137,6 +138,7 @@ button:hover { background: #f0f0f0; }
   background: #4caf50;
   color: #fff;
   border-color: #4caf50;
+  grid-column: span 2;
 }
 .equals:hover { background: #43a047; }
 
